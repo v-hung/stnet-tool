@@ -9,10 +9,11 @@ import {
   type ChangeEvent,
 } from 'react'
 import { csvToTsv, tsvToCsv } from '~/features/home/utils/home.util'
+import { useHomeStore } from '~/stores/home.store'
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: 'STnet Tools' },
+    { title: 'STnet Tools - Csv to Tsv' },
     { name: 'author', content: 'viet.hung.2898@gmail.com' },
   ]
 }
@@ -20,15 +21,13 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const { message } = App.useApp()
 
-  const [convertType, setConvertType] = useState<'csvToExcel' | 'excelToCsv'>(
-    'csvToExcel',
-  )
+  const { convertType, setConvertType } = useHomeStore()
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
 
   useEffect(() => {
     if (input) {
-      setOutput(convertType == 'csvToExcel' ? csvToTsv(input) : tsvToCsv(input))
+      setOutput(convertType == 'csvToTsv' ? csvToTsv(input) : tsvToCsv(input))
     } else {
       setOutput('')
     }
@@ -58,14 +57,14 @@ export default function Home() {
         style={{ margin: '16px 0' }}
         items={[
           { key: '1', title: 'STnet tools' },
-          { key: '2', title: 'Csv data to excel data' },
+          { key: '2', title: 'Csv data to tsv data' },
         ]}
       />
 
       <div className="mt-12 flex items-center">
         <div className="group relative flex-1">
           <p className="absolute -top-8 left-1 text-lg font-semibold">
-            {convertType === 'csvToExcel' ? 'Csv data' : 'Excel data'}
+            {convertType === 'csvToTsv' ? 'Csv data' : 'Tsv data'}
           </p>
           <TextArea
             value={input}
@@ -86,11 +85,7 @@ export default function Home() {
         <div className="flex-none">
           <div
             className="cursor-pointer rounded-full p-1 hover:bg-white/60"
-            onClick={() =>
-              setConvertType(prev =>
-                prev === 'excelToCsv' ? 'csvToExcel' : 'excelToCsv',
-              )
-            }
+            onClick={() => setConvertType()}
           >
             <img src="./icons/sync.svg" className="h-10 w-10" alt="Switch" />
           </div>
@@ -98,7 +93,7 @@ export default function Home() {
 
         <div className="group relative flex-1">
           <p className="absolute -top-8 left-1 text-lg font-semibold">
-            {convertType !== 'csvToExcel' ? 'Csv data' : 'Excel data'}
+            {convertType !== 'csvToTsv' ? 'Csv data' : 'Tsv data'}
           </p>
           <TextArea
             autoSize={{ minRows: 20, maxRows: 30 }}

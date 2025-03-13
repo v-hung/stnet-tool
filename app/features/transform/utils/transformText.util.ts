@@ -1,15 +1,19 @@
 export function verticalToHorizontal(text: string) {
-  return text
-    .trim()
-    .split('\n') // Chia từng dòng
-    .map(field => `"${field.replace(/"/g, '""')}"`) // Bọc trong `""`, escape dấu `"`
-    .join('\t') // Ghép lại bằng dấu tab
-}
+  const rows = text.trim().split('\n')
 
-export function horizontalToVertical(text: string) {
-  return text
-    .trim()
-    .split('\t') // Chia theo dấu tab
-    .map(field => `"${field.replace(/"/g, '""')}"`) // Bọc trong `""`, escape dấu `"`
-    .join('\n') // Ghép lại thành từng dòng
+  const matrix = rows.map(row => row.split('\t'))
+
+  const numRows = matrix.length
+  const numCols = matrix[0].length
+
+  const result = []
+  for (let col = 0; col < numCols; col++) {
+    const newRow = []
+    for (let row = 0; row < numRows; row++) {
+      newRow.push(matrix[row][col])
+    }
+    result.push(newRow)
+  }
+
+  return result.map(row => row.join('\t')).join('\n')
 }
