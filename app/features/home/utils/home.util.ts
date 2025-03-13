@@ -9,7 +9,7 @@ export function csvToTsv(csv: string) {
 
     while ((match = regex.exec(lines[i])) !== null) {
       let field = match[1] !== undefined ? match[1] : match[2]
-      fields.push(`"${field}"`)
+      fields.push(`="${field}"`)
     }
 
     tsvLines[i] = fields.join('\t')
